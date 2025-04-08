@@ -1,5 +1,8 @@
-#hungman_game
+# 🔠 Hangman Game — Guess the Country Name!
 
+import random
+
+# Hangman stages represented as ASCII art
 stages = [
     """
        ------
@@ -66,71 +69,75 @@ stages = [
     """
 ]
 
+# List of country names to guess
+words = ['INDIA', 'DUBAI', 'LONDON', 'RUSSIA', 'CHINA', 'NEPAL','EGYPT','ITALY','JAPAN','SPAIN','BRAZIL','SWEDEN']
 
+# Welcome Message
+print("                         Welcome to the Hangman Game...")
+print('''          
+          As you can see there are few blanks and you have to guess
+          which country name fits in those blanks...
+                                  *WISH YOU GOOD LUCK*...
+''')
 
-import random
-words = ['INDIA','DUBAI','LONDON','RUSSIA','CHINA','NEPAL']
-
-print("                         Welcome to the hungeman game...")
-print('''          as you can see there are few blanks and you have to guess
-                     that which country will be fit in these blanks...
-                                  *WISH YOU GOOD LUCK*...''')
-
+# Game Loop
 ch = "Y"
 while ch == "Y":
-    rand= random.choice(words)
-
-    #print(rand)
-    dash=len(rand)
-
-    print(["_" ]* dash)
-
-    correctopt=["_"] * len(rand)
-
+    rand = random.choice(words)              # Select a random country
+    dash = len(rand)                         # Get the number of letters
+    correctopt = ["_"] * dash                # Blank spaces for the word
     game_over = False
-    attempt=(len(rand))-2
+    attempt = dash - 2                       # Number of allowed incorrect guesses
 
-    print("you have total", attempt, "lives")
+    print("Word to guess:", correctopt)
+    print("You have total", attempt, "lives")
 
+    # Round loop
     while not game_over and attempt > 0:
-    
         correct = False
-        guess=input("try to guess the country's name: ").upper()
-        if len(guess) > 1:
-            print("please enter 1 word at a time")
-    
+        guess = input("Try to guess a letter: ").upper()
+
+        # Ensure only 1 letter is entered
+        if len(guess) != 1:
+            print("⚠️ Please enter only one letter at a time.")
+            continue
+
+        # Check guess and update correctopt
         for i in range(len(rand)):
             if rand[i] == guess:
-                correctopt[i]=(guess)
-                correct = True 
-        #attempt-=1        
-            
-        if correct == True:
-            print("correct guess!")
-        
-        if correct == False:
-            print("wrong guess!")
-            attempt-=1
+                correctopt[i] = guess
+                correct = True
+
+        # Handle result of the guess
+        if correct:
+            print("✅ Correct guess!")
+        else:
+            print("❌ Wrong guess!")
+            attempt -= 1
             if attempt > 0:
                 print(stages[len(stages) - attempt - 1])
-        print(correctopt)
-    
+
+        # Show current progress
+        print("Word:", correctopt)
+
+        # Check for loss
         if attempt == 0:
-            print("you lose the game")
-            print("the man got hunge💀")
+            print("💀 You lost the game. The man got hanged.")
             print(stages[-1])
-            print(f"The correct word is {rand}")
+            print(f"The correct word was: {rand}")
             print("*" * 90)
             break
-        print("you have:", attempt, "lives left")
-    
+
+        print("❤️ Lives left:", attempt)
+
+        # Check for win
         if "_" not in correctopt:
-            print(f" CONGRATULATION! you guessed the word {rand}")
-            print("you savedd the man")
+            print(f"🎉 CONGRATULATIONS! You guessed the word: {rand}")
+            print("🥳 You saved the man!")
             print("*" * 90)
             break
-    ch= input("do you want to try again?(Y/N): ").upper()
+
+    # Play again?
+    ch = input("Do you want to try again? (Y/N): ").upper()
     if ch != "Y":
-        print("come back if you want to play more!")
-    
-    
+        print("👋 Come back anytime to play more. Thanks for playing!")
